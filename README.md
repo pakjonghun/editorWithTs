@@ -4,6 +4,7 @@
 
 - redux : redux, redux-tool-kit, redux-saga, redux-readt,
 - react
+- bundle : esbuild-warm
 
 ## 진행
 
