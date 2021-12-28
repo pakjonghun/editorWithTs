@@ -21,30 +21,47 @@ export const fetchPlugin = (code: string) => {
         const isExist = await fileCache.getItem<esbuild.OnLoadResult>(
           args.path
         );
+        if (isExist) return isExist;
+        return null;
+      });
 
-        if (!isExist) {
-          const { data, request } = await axios.get<string>(args.path);
-          const isCss = /\.css$/.test(args.path);
-          const escaped = data
-            .replace(/\n/g, "")
-            .replace(/"/g, '\\"')
-            .replace(/'/g, "\\'");
-          const temp: esbuild.OnLoadResult = {
-            loader: "jsx",
-            contents: isCss
-              ? `const style = document.createElement('style');
-                style.innerText = '${escaped}';
-                document.head.appendChild(style);`
-              : data,
-            resolveDir: new URL("./", request.responseURL).pathname,
-          };
+      build.onLoad({ filter: /\.css$/ }, async (args: any) => {
+        const result = await commonOnLoad(args.path);
+        if (typeof result.contents !== "string") return;
 
-          await fileCache.setItem<esbuild.OnLoadResult>(args.path, temp);
+        const escaped = result.contents
+          .replace(/\n/g, "")
+          .replace(/'/g, "//'")
+          .replace(/"/g, '//"');
 
-          return temp;
-        }
-        return isExist;
+        const cssState = `
+        const style = document.createElement('style');
+        style.innerText = '${escaped}'
+        document.head.appendChild(style);
+        `;
+
+        result.contents = cssState;
+        await fileCache.setItem<esbuild.OnLoadResult>(args.path, result);
+        return result;
+      });
+
+      build.onLoad({ filter: /.*/ }, async (args: any) => {
+        const result = await commonOnLoad(args.path);
+        await fileCache.setItem<esbuild.OnLoadResult>(args.path, result);
+        return result;
       });
     },
   };
 };
+
+async function commonOnLoad(path: string) {
+  const { data, request } = await axios.get<string>(path);
+
+  const temp: esbuild.OnLoadResult = {
+    loader: "jsx",
+    contents: data,
+    resolveDir: new URL("./", request.responseURL).pathname,
+  };
+
+  return temp;
+}

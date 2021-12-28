@@ -3,8 +3,8 @@ export type RequestPayload = {
   code: string;
 };
 
-export type SuccessPayload = {
-  data: codeType;
+export type SuccessPayload<T> = {
+  data: T;
 };
 
 export type FailPayload = {

@@ -5,14 +5,17 @@ import { codeActions } from "../store/reducer/code";
 import { unpkgPathPlugin } from "../plugin/unpkg.path.plugin";
 import { fetchPlugin } from "../plugin/fetchPlugin";
 
-const Textarea: React.FC = () => {
+const Textarea: React.FC<{
+  iframe: React.MutableRefObject<HTMLIFrameElement>;
+  html: string;
+}> = ({ iframe, html }) => {
   const ref = useRef<any>(null);
 
   useEffect(() => {
     const startService = async () => {
       ref.current = await esbuild.startService({
         worker: true,
-        wasmURL: "/esbuild.wasm",
+        wasmURL: "https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm",
       });
     };
     startService();
@@ -23,6 +26,8 @@ const Textarea: React.FC = () => {
 
   const onSubmit = useCallback(async () => {
     if (!ref.current) return;
+
+    iframe.current.srcdoc = html;
 
     const a = await ref.current.build({
       entryPoints: ["index.js"],

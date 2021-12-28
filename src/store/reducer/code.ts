@@ -19,7 +19,7 @@ type codeState = {
 
 const initialState: codeState = {
   insertStatus: "loading",
-  data: { id: 1, data: "hellow" },
+  data: { id: 1, data: "" },
   error: null,
 };
 
@@ -30,9 +30,11 @@ const codeSlice = createSlice({
     insertRequest: (state, _: PayloadAction<RequestPayload>) => {
       state.insertStatus = "loading";
     },
-    insertSuccess: (state, { payload }: PayloadAction<SuccessPayload>) => {
+    insertSuccess: (
+      state,
+      { payload }: PayloadAction<SuccessPayload<codeType>>
+    ) => {
       state.insertStatus = "success";
-
       state.data = payload.data;
     },
     insertFail: (state, { payload }: PayloadAction<FailPayload>) => {
