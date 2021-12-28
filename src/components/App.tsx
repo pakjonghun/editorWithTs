@@ -12,7 +12,7 @@ const App: FC = () => {
   return (
     <>
       <Textarea />
-      <PrintWindow code={code} />
+      {/* <PrintWindow code={code} /> */}
       <pre>{code}</pre>
     </>
   );

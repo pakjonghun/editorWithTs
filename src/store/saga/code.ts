@@ -8,7 +8,7 @@ function requestInsert(data: string): SuccessPayload {
 
 function* insert({ payload }: { payload: RequestPayload }) {
   try {
-    yield delay(1000);
+    // yield delay(1000);
     const data: SuccessPayload = yield call(requestInsert, payload.code);
     yield put(codeActions.insertSuccess(data));
   } catch (error: any) {

@@ -3,6 +3,7 @@ import * as esbuild from "esbuild-wasm";
 import { useDispatch } from "react-redux";
 import { codeActions } from "../store/reducer/code";
 import { unpkgPathPlugin } from "../plugin/unpkg.path.plugin";
+import { fetchPlugin } from "../plugin/fetchPlugin";
 
 const Textarea: React.FC = () => {
   const ref = useRef<any>(null);
@@ -27,17 +28,15 @@ const Textarea: React.FC = () => {
       entryPoints: ["index.js"],
       bundle: true,
       write: false,
-      plugins: [unpkgPathPlugin()],
+      plugins: [unpkgPathPlugin(), fetchPlugin(code)],
       define: {
         "process.env.NODE_ENV": '"production"',
         global: "window",
       },
     });
 
-    console.log(a.outputFiles[0].text);
-
     dispatch(codeActions.insertRequest({ code: a.outputFiles[0].text }));
-  }, [dispatch]);
+  }, [dispatch, code]);
 
   const onChange = useCallback(
     (value: string) => {

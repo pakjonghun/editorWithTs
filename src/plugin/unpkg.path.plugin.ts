@@ -1,56 +1,29 @@
 import * as esbuild from "esbuild-wasm";
-import axios from "axios";
-import localforage from "localforage";
-
-const fileCache = localforage.createInstance({
-  name: "fileCahce",
-});
 
 export const unpkgPathPlugin = () => {
   return {
     name: "unpkg-path-plugin",
     setup(build: esbuild.PluginBuild) {
-      build.onResolve({ filter: /.*/ }, async (args: any) => {
-        console.log("resolve", args);
-        if (args.path === "index.js") {
-          return { path: args.path, namespace: "a" };
-        }
+      const baseUrl = "https://unpkg.com";
 
-        const regExp = /(\.\/)|(\.\.\/)/;
-        const baseUrl = "https://unpkg.com";
-        if (regExp.test(args.path)) {
-          const url = new URL(args.path, baseUrl + args.resolveDir + "/");
+      //handle root entry file
+      build.onResolve({ filter: /(^index\.js$)/ }, async (args: any) => {
+        return { path: args.path, namespace: "a" };
+      });
 
-          return {
-            path: url.href,
-            namespace: "a",
-          };
-        }
-
+      //handle relative paths in module
+      build.onResolve({ filter: /(^\.\/)|(^\.\/\/)/ }, (args: any) => {
         return {
-          path: baseUrl + "/" + args.path,
+          path: new URL(args.path, baseUrl + args.resolveDir + "/").href,
           namespace: "a",
         };
       });
 
-      build.onLoad({ filter: /.*/ }, async (args: any) => {
-        console.log("onload", args);
-        if (args.path === "index.js") {
-          return {
-            loader: "jsx",
-            contents: `
-              import React,{useState} from 'react-select'
-              
-              console.log(React,useState);
-            `,
-          };
-        }
-        const { data, request } = await axios.get(args.path);
-
+      //handle mainfiles in module
+      build.onResolve({ filter: /.*/ }, async (args: any) => {
         return {
-          loader: "jsx",
-          contents: data,
-          resolveDir: new URL("./", request.responseURL).pathname,
+          path: baseUrl + "/" + args.path,
+          namespace: "a",
         };
       });
     },
