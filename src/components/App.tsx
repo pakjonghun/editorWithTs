@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import useOnChange from "../hooks/useOnChange";
 import { rootReducerType } from "../store/reducer";
 import CodeEditor from "./codeEditor";
+import PreviewComponent from "./preview.component";
 import Textarea from "./Textarea";
 const App: FC = () => {
   const ref = useRef<any>();
@@ -11,7 +12,6 @@ const App: FC = () => {
   const code = useSelector<rootReducerType, string>(
     (state) => state.code.data.data
   );
-  if (ref.current) ref.current.contentWindow.postMessage(code, "*");
 
   const html = `
   <html>
@@ -45,12 +45,7 @@ const App: FC = () => {
         value={value}
       />
       <Textarea iframe={ref} html={html} />
-      <iframe
-        title="123"
-        ref={ref}
-        sandbox="allow-scripts"
-        srcDoc={html}
-      ></iframe>
+      <PreviewComponent code={code} />
     </>
   );
 };
