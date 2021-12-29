@@ -12,44 +12,20 @@ import { unpkgPathPlugin } from "../plugin/unpkg.path.plugin";
 import { codeActions } from "../store/reducer/code";
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
+import bundler from "../bundler";
 
 type CodeEditorProps = {
   initialValue: string;
   onChange: (value: string) => void;
   value: string;
-  html: string;
-  iframe: any;
 };
 
-const CodeEditor: FC<CodeEditorProps> = ({
-  initialValue,
-  onChange,
-  value,
-  html,
-  iframe,
-}) => {
-  const { builder } = useOnBundle();
+const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange, value }) => {
   const dispatch = useDispatch();
 
   const onClick = async () => {
-    if (!builder.current || !iframe.current) return;
-
-    iframe.current.srcdoc = html;
-
-    const translated = await builder.current.build({
-      entryPoints: ["index.js"],
-      bundle: true,
-      write: false,
-      plugins: [unpkgPathPlugin(), fetchPlugin(value)],
-      define: {
-        "process.env.NODE_ENV": '"production"',
-        global: "window",
-      },
-    });
-
-    dispatch(
-      codeActions.insertRequest({ code: translated.outputFiles[0].text })
-    );
+    const code = await bundler(value);
+    dispatch(codeActions.insertRequest({ code }));
   };
 
   const onFormatClick = () => {
