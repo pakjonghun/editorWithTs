@@ -41,7 +41,7 @@ const Textarea: React.FC<{
     });
 
     dispatch(codeActions.insertRequest({ code: a.outputFiles[0].text }));
-  }, [dispatch, code]);
+  }, [dispatch, iframe, html, code]);
 
   const onChange = useCallback(
     (value: string) => {
@@ -59,13 +59,13 @@ const Textarea: React.FC<{
         }}
       >
         <textarea
-          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
-            onChange(event.target.value)
-          }
+          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+            onChange(event.target.value);
+          }}
           value={code}
         />
 
-        <button>click</button>
+        <button type="submit">click</button>
       </form>
     </>
   );

@@ -1,16 +1,16 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 
 import { useSelector } from "react-redux";
+import useOnChange from "../hooks/useOnChange";
 import { rootReducerType } from "../store/reducer";
-import PrintWindow from "./PrintWindow";
+import CodeEditor from "./codeEditor";
 import Textarea from "./Textarea";
 const App: FC = () => {
   const ref = useRef<any>();
-
+  const { value, onChange } = useOnChange("");
   const code = useSelector<rootReducerType, string>(
     (state) => state.code.data.data
   );
-
   if (ref.current) ref.current.contentWindow.postMessage(code, "*");
 
   const html = `
@@ -26,11 +26,9 @@ const App: FC = () => {
         try {
           eval(event.data);
         } catch (err) {
-          console.log(err.name);
-          console.log(err.message);
-          const root = document.getElementById('root');
-          root.innerHTML = '<div style="color:red;"><h2>'+err.name+'<h2><h4>'+err.message+'<h4></div>';
-          console.error(err);
+        const root = document.getElementById('root');
+        root.innerHTML = '<div style="color:red;"><h2>'+err.name+'</h2><h4>'+err.message+'</h4></div>';
+        console.error(err);
         }
       }, false);
     </script>
@@ -39,8 +37,14 @@ const App: FC = () => {
 
   return (
     <>
+      <CodeEditor
+        html={html}
+        iframe={ref}
+        initialValue="Default"
+        onChange={onChange}
+        value={value}
+      />
       <Textarea iframe={ref} html={html} />
-      {/* <pre>{code}</pre> */}
       <iframe
         title="123"
         ref={ref}
