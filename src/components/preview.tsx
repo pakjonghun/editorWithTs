@@ -1,3 +1,4 @@
+import "../style/preview.css";
 import { FC, useEffect, useRef } from "react";
 
 type PreviewComponentProps = {
@@ -9,7 +10,22 @@ const html = `
     <head>
     </head>
     <body>
-      <div id="root"></div>
+      <div id="root">
+      asdfasdf
+      <br/>
+      asdf
+      <br/>
+      asd
+      <br/>
+      fa
+      <br/>
+      dsf
+      <br/>
+      asdf
+      <br/>
+      ads
+      <br/>
+      </div>
     </body>
 
     <script>
@@ -26,22 +42,23 @@ const html = `
   </html>
   `;
 
-const PreviewComponent: FC<PreviewComponentProps> = ({ code }) => {
+const Preview: FC<PreviewComponentProps> = ({ code }) => {
   const iframe = useRef<HTMLIFrameElement>(null);
   useEffect(() => {
     if (!iframe.current) return;
-    iframe.current.srcdoc = html;
+    // iframe.current.srcdoc = html;
     iframe.current.contentWindow?.postMessage(code, "*");
   }, [code]);
   return (
-    <iframe
-      style={{ border: "1px solid gray", color: "white" }}
-      ref={iframe}
-      title="preview"
-      sandbox="allow-scripts"
-      srcDoc={html}
-    />
+    <div className="codeIframe">
+      <iframe
+        ref={iframe}
+        title="preview"
+        sandbox="allow-scripts"
+        srcDoc={html}
+      />
+    </div>
   );
 };
 
-export default PreviewComponent;
+export default Preview;

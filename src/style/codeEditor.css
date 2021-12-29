@@ -1,6 +1,8 @@
 .editorWrapper {
   position: relative;
+  width: 100%;
   height: 100%;
+  z-index: 0;
 }
 
 .editorWrapper .button-format {
@@ -14,4 +16,9 @@
 
 .editorWrapper:hover .button-format {
   opacity: 1;
+}
+
+.submitButton {
+  position: absolute;
+  bottom: 0;
 }

@@ -1,6 +1,6 @@
 import * as esbuild from "esbuild-wasm";
-import { fetchPlugin } from "./../plugin/fetchPlugin";
-import { unpkgPathPlugin } from "./../plugin/unpkg.path.plugin";
+import { fetchPlugin } from "./plugin/fetchPlugin";
+import { unpkgPathPlugin } from "./plugin/unpkg.path.plugin";
 
 let builder: esbuild.Service;
 const getBundled = async (rawCode: string) => {

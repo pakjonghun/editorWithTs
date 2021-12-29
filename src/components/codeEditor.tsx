@@ -1,15 +1,7 @@
+import React, { FC } from "react";
 import "../style/codeEditor.css";
-import codeShift from "jscodeshift";
-import HighLighter from "monaco-jsx-highlighter";
 import "bulmaswatch/superhero/bulmaswatch.min.css";
-import Editor, { EditorProps, useMonaco } from "@monaco-editor/react";
-import React, { FC, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-import useOnBundle from "../hooks/useOnBundle";
-import useOnChange from "../hooks/useOnChange";
-import { fetchPlugin } from "../plugin/fetchPlugin";
-import { unpkgPathPlugin } from "../plugin/unpkg.path.plugin";
-import { codeActions } from "../store/reducer/code";
+import Editor from "@monaco-editor/react";
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import bundler from "../bundler";
@@ -17,15 +9,19 @@ import bundler from "../bundler";
 type CodeEditorProps = {
   initialValue: string;
   onChange: (value: string) => void;
+  setChanged: (value: string) => void;
   value: string;
 };
 
-const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange, value }) => {
-  const dispatch = useDispatch();
-
+const CodeEditor: FC<CodeEditorProps> = ({
+  initialValue,
+  onChange,
+  value,
+  setChanged,
+}) => {
   const onClick = async () => {
     const code = await bundler(value);
-    dispatch(codeActions.insertRequest({ code }));
+    setChanged(code);
   };
 
   const onFormatClick = () => {
@@ -53,7 +49,7 @@ const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange, value }) => {
         Format
       </button>
       <Editor
-        onChange={(value, editor) => {
+        onChange={(value) => {
           value && onChange(value);
         }}
         defaultValue={initialValue}
@@ -67,16 +63,17 @@ const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange, value }) => {
           showUnused: false,
           folding: false,
           lineNumbersMinChars: 2,
-          fontSize: 16,
-          scrollBeyondLastLine: true,
+          fontSize: 14,
+          scrollBeyondLastLine: false,
           automaticLayout: true,
         }}
-        width={"50vw"}
+        height={"100%"}
         theme="vs-dark"
-        height={"50vh"}
         language="javascript"
       />
-      <button onClick={() => onClick()}>submit</button>
+      <button className="submitButton" onClick={() => onClick()}>
+        submit
+      </button>
     </div>
   );
 };
