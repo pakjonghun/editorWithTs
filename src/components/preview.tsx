@@ -10,24 +10,8 @@ const html = `
     <head>
     </head>
     <body>
-      <div id="root">
-      asdfasdf
-      <br/>
-      asdf
-      <br/>
-      asd
-      <br/>
-      fa
-      <br/>
-      dsf
-      <br/>
-      asdf
-      <br/>
-      ads
-      <br/>
-      </div>
+      <div id="root"></div>
     </body>
-
     <script>
       window.addEventListener('message', (event) => {
         try {

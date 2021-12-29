@@ -6,9 +6,8 @@ import Resizable from "./resizable";
 const CodeCell: FC = () => {
   const [rawCode, setRawCode] = useState("");
   const [translatedCode, setTranslatedCode] = useState<string>("");
-
   return (
-    <Resizable height={500} width={Infinity} direction="vertical">
+    <Resizable direction="vertical">
       <div
         style={{
           display: "flex",
@@ -17,12 +16,14 @@ const CodeCell: FC = () => {
           height: "100%",
         }}
       >
-        <CodeEditor
-          initialValue="Default"
-          onChange={setRawCode}
-          value={rawCode}
-          setChanged={setTranslatedCode}
-        />
+        <Resizable direction="horizontal">
+          <CodeEditor
+            initialValue="Default"
+            onChange={setRawCode}
+            value={rawCode}
+            setChanged={setTranslatedCode}
+          />
+        </Resizable>
         <PreviewComponent code={translatedCode} />
       </div>
     </Resizable>
