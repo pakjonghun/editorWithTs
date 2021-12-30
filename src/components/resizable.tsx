@@ -1,5 +1,6 @@
 import React, { FC } from "react";
-import { ResizableBox, ResizeHandle } from "react-resizable";
+import { ResizableBox } from "react-resizable";
+import useAutoWidth from "../hooks/autoWidth";
 import "../style/resizable.css";
 
 type ResizableProps = {
@@ -10,17 +11,18 @@ const Resizable: FC<ResizableProps> = ({
   children,
   direction = "horizontal",
 }) => {
+  const { width, height } = useAutoWidth({});
+
   if (direction === "horizontal") {
-    console.log(window.innerWidth);
     return (
       <ResizableBox
         className={"codeWidthHandler"}
-        maxConstraints={[window.innerWidth * 0.7, Infinity]}
-        minConstraints={[window.innerWidth * 0.3, Infinity]}
+        maxConstraints={[width * 0.7, Infinity]}
+        minConstraints={[width * 0.3, Infinity]}
         resizeHandles={["e"]}
         draggableOpts={{ direction }}
         height={Infinity}
-        width={window.innerWidth * 0.7}
+        width={width * 0.7}
       >
         {children}
       </ResizableBox>
@@ -28,11 +30,11 @@ const Resizable: FC<ResizableProps> = ({
   } else {
     return (
       <ResizableBox
-        maxConstraints={[Infinity, window.innerHeight * 0.7]}
-        minConstraints={[Infinity, window.innerHeight * 0.3]}
+        maxConstraints={[Infinity, height * 0.7]}
+        minConstraints={[Infinity, height * 0.3]}
         resizeHandles={["s"]}
         draggableOpts={{ direction }}
-        height={window.innerHeight * 0.3}
+        height={height * 0.3}
         width={Infinity}
       >
         {children}

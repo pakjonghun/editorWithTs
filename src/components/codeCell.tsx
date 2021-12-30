@@ -1,4 +1,5 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
+
 import CodeEditor from "./codeEditor";
 import PreviewComponent from "./preview";
 import Resizable from "./resizable";
@@ -6,6 +7,7 @@ import Resizable from "./resizable";
 const CodeCell: FC = () => {
   const [rawCode, setRawCode] = useState("");
   const [translatedCode, setTranslatedCode] = useState<string>("");
+
   return (
     <Resizable direction="vertical">
       <div
