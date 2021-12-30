@@ -6,22 +6,27 @@ import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import bundler from "../bundler";
 
+type setFunc<T> = (value: T) => void;
+
 type CodeEditorProps = {
   initialValue: string;
-  onChange: (value: string) => void;
-  setChanged: (value: string) => void;
+  onChange: setFunc<string>;
+  setChanged: setFunc<string>;
+  setError: setFunc<string>;
   value: string;
 };
 
 const CodeEditor: FC<CodeEditorProps> = ({
   initialValue,
   onChange,
+  setError,
   value,
   setChanged,
 }) => {
   const onClick = async () => {
-    const code = await bundler(value);
-    setChanged(code);
+    const { code, error } = await bundler(value);
+    code && setChanged(code);
+    error && setError(error);
   };
 
   const onFormatClick = () => {
@@ -39,7 +44,7 @@ const CodeEditor: FC<CodeEditorProps> = ({
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => setChanged(value), 500);
+    const timer = setTimeout(() => setChanged(value), 1000);
     return () => clearTimeout(timer);
   }, [value, setChanged]);
 

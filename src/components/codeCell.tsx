@@ -7,6 +7,7 @@ import Resizable from "./resizable";
 const CodeCell: FC = () => {
   const [rawCode, setRawCode] = useState("");
   const [translatedCode, setTranslatedCode] = useState<string>("");
+  const [err, setErr] = useState<string>("");
 
   return (
     <Resizable direction="vertical">
@@ -22,11 +23,12 @@ const CodeCell: FC = () => {
           <CodeEditor
             initialValue="Default"
             onChange={setRawCode}
+            setError={setErr}
             value={rawCode}
             setChanged={setTranslatedCode}
           />
         </Resizable>
-        <PreviewComponent code={translatedCode} />
+        <PreviewComponent err={err} code={translatedCode} />
       </div>
     </Resizable>
   );
