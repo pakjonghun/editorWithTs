@@ -11,8 +11,8 @@ const useAutoWidth = ({
 }: initialProps) => {
   const [width, setWidth] = useState<number>(initialWidth);
   const [height, setHeight] = useState<number>(initialHeight);
+
   function getCurWidhtAndHeight() {
-    console.log(1);
     setWidth(window.innerWidth);
     setHeight(window.innerHeight);
   }

@@ -5,7 +5,6 @@ import Editor from "@monaco-editor/react";
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import bundler from "../bundler";
-let timer: any;
 
 type CodeEditorProps = {
   initialValue: string;
@@ -40,16 +39,8 @@ const CodeEditor: FC<CodeEditorProps> = ({
   };
 
   useEffect(() => {
-    const dbounce = (func: Function) => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-
-      timer = setTimeout(() => {
-        func();
-      }, 250);
-    };
-    dbounce(() => setChanged(value));
+    const timer = setTimeout(() => setChanged(value), 500);
+    return () => clearTimeout(timer);
   }, [value, setChanged]);
 
   return (

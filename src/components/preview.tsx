@@ -32,12 +32,18 @@ const html = `
   `;
 
 const Preview: FC<PreviewComponentProps> = ({ code }) => {
-  const iframe = useRef<HTMLIFrameElement>(null);
+  const iframe = useRef<any>();
+
   useEffect(() => {
-    if (!iframe.current) return;
-    // iframe.current.srcdoc = html;
-    iframe.current.contentWindow?.postMessage(code, "*");
+    iframe.current.srcdoc = html;
+
+    const timer = setTimeout(() => {
+      iframe.current.contentWindow?.postMessage(code, "*");
+    }, 50);
+
+    return () => clearTimeout(timer);
   }, [code]);
+
   return (
     <div className="codeIframe">
       <iframe

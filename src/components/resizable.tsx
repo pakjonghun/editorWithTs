@@ -1,7 +1,6 @@
 import React, { FC, useState } from "react";
 import { ResizableBox } from "react-resizable";
 import useAutoWidth from "../hooks/autoWidth";
-import useInnerWidth from "../hooks/innerWidth";
 import "../style/resizable.css";
 
 type ResizableProps = {
