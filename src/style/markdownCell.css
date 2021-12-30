@@ -1,0 +1,24 @@
+.editorWindow {
+  margin-top: 5%;
+}
+
+.editorWindow .w-md-editor-bar svg {
+  display: none;
+}
+
+.editorWindow .w-md-editor-bar {
+  height: 11px;
+  width: 100%;
+  display: block;
+  background-color: #37414b;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  z-index: 20;
+  cursor: row-resize;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=");
+}
+
+.innerCard {
+  background-color: #37414b;
+  padding: 1%;
+}

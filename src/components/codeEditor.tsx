@@ -81,9 +81,6 @@ const CodeEditor: FC<CodeEditorProps> = ({
         theme="vs-dark"
         language="javascript"
       />
-      <button className="submitButton" onClick={() => onClick()}>
-        submit
-      </button>
     </div>
   );
 };
