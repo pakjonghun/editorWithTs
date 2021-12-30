@@ -5,8 +5,6 @@ type initialProps = {
   initialHeight?: number;
 };
 
-const bouncingTime = 10;
-
 const useAutoWidth = ({
   initialWidth = window.innerWidth,
   initialHeight = window.innerHeight,
@@ -29,7 +27,7 @@ const useAutoWidth = ({
         timer = setTimeout(() => {
           getCurWidhtAndHeight();
           timer = null;
-        }, 250);
+        }, 100);
       };
     }
 

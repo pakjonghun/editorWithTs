@@ -1,10 +1,11 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { ResizableBox } from "react-resizable";
 import useAutoWidth from "../hooks/autoWidth";
+import useInnerWidth from "../hooks/innerWidth";
 import "../style/resizable.css";
 
 type ResizableProps = {
-  direction?: "horizontal" | "vertical";
+  direction: "horizontal" | "vertical";
 };
 
 const Resizable: FC<ResizableProps> = ({
@@ -12,6 +13,8 @@ const Resizable: FC<ResizableProps> = ({
   direction = "horizontal",
 }) => {
   const { width, height } = useAutoWidth({});
+
+  const [rate, setRate] = useState<number>(0.6);
 
   if (direction === "horizontal") {
     return (
@@ -22,7 +25,10 @@ const Resizable: FC<ResizableProps> = ({
         resizeHandles={["e"]}
         draggableOpts={{ direction }}
         height={Infinity}
-        width={width * 0.7}
+        width={width * rate}
+        onResizeStop={(_, data) => {
+          setRate(data.size.width / width);
+        }}
       >
         {children}
       </ResizableBox>
@@ -34,7 +40,7 @@ const Resizable: FC<ResizableProps> = ({
         minConstraints={[Infinity, height * 0.3]}
         resizeHandles={["s"]}
         draggableOpts={{ direction }}
-        height={height * 0.3}
+        height={300}
         width={Infinity}
       >
         {children}
