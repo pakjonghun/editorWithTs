@@ -1,10 +1,11 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import "../style/codeEditor.css";
 import "bulmaswatch/superhero/bulmaswatch.min.css";
 import Editor from "@monaco-editor/react";
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import bundler from "../bundler";
+let timer: any;
 
 type CodeEditorProps = {
   initialValue: string;
@@ -37,6 +38,19 @@ const CodeEditor: FC<CodeEditorProps> = ({
 
     onChange(translated);
   };
+
+  useEffect(() => {
+    const dbounce = (func: Function) => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+
+      timer = setTimeout(() => {
+        func();
+      }, 250);
+    };
+    dbounce(() => setChanged(value));
+  }, [value, setChanged]);
 
   return (
     <div className="editorWrapper">
